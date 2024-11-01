@@ -1,97 +1,110 @@
-import {handleChangePass} from '../../services/auth'
-import '../admin/layout.scss'
-import lich from '../../assest/images/lich.png'
-import avatar from '../../assest/images/user.svg'
 import { useState, useEffect } from 'react'
-
+import { useLocation, Link } from 'react-router-dom';
 function Header({ children }){
-    checkAdmin();
-    useEffect(()=>{
-        getDateTime();
+     // Ensure useLocation is called at the top level of the component
+     const location = useLocation();
 
+     // Function to check if the current path matches the given pathname
+     const isActive = (pathname) => {
+         for(var i=0; i<pathname.length; i++){
+            if(location.pathname === pathname[i]){
+                return 'activenavbar';
+            }
+         }
+         return '';
+     };
+     
+    const [isCssLoaded, setCssLoaded] = useState(false);
+    useEffect(()=>{
+        import('../admin/layout.scss').then(() => setCssLoaded(true));
     }, []);
-    function getDateTime() {
-            var now = new Date();
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1;
-            var day = now.getDate();
-            var hour = now.getHours();
-            var minute = now.getMinutes();
-            var second = now.getSeconds(); //
-            var a = 0;
-            //
-            if (month.toString().length == 1) {
-                month = '0' + month;
-            }
-            if (day.toString().length == 1) {
-                day = '0' + day;
-            }
-            if (hour.toString().length == 1) {
-                hour = '0' + hour;
-            }
-            if (minute.toString().length == 1) {
-                minute = '0' + minute;
-            }
-            if (second.toString().length == 1) {
-                second = '0' + second;
-            }
-            var dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' +
-                minute + ':' + second;
-            return dateTime;
-        }
-        setInterval(function() {
-            var currentTime = getDateTime();
-            document.getElementById("digital-clock").innerHTML = currentTime;
-        }, 1000);
-        
-        var date = new Date();
-        
-        var current_day = date.getDay();
-        
-        var day_name = '';
-        
+    if (!isCssLoaded) {
+        return <></>
+    }
+
+    var user = window.localStorage.getItem("user")
+    if(user != null){
+        user = JSON.parse(user);
+    }
+
+    function openClose(){
+        document.getElementById("sidebar").classList.toggle("toggled");
+        document.getElementById("page-content-wrapper").classList.toggle("toggled");
+        document.getElementById("navbarmain").classList.toggle("navbarmainrom");
+    }
+
     return(
-        <>
-         <div class="navleft" id="navleft">
-         <div class="divroot">
-                <h3>ADMIN</h3>
+        <div class="d-flex" id="wrapper">
+        <nav id="sidebar" class="bg-dark">
+            <div class="sidebar-header p-3 text-white">
+            <i class="fa fa-bars pointer" id="iconbaradmin" onClick={openClose}></i>
+            ADIMIN
             </div>
-            <div class="listmenumain">
-                <a href="user"><i className='fa fa-user'></i> Account</a>
-                <a href="category"><i className='fa fa-list'></i> Category</a>
-                <a href="product"><i className='fa fa-t-shirt'></i> Product</a>
-                <a href="#" onClick={()=>logout()}><i className='fa fa-sign-out'></i> Logout</a>
+            <ul class="list-unstyled components">
+                <li className={isActive(["/admin/user"])}>
+                    <a href="user" class="text-white text-decoration-none">
+                        <i class="fa fa-user"></i> Account
+                    </a>
+                </li>
+                <li className={isActive(["/admin/category"])}>
+                    <a href="category" class="text-white text-decoration-none">
+                        <i class="fa fa-list"></i> Category
+                    </a>
+                </li>
+                <li className={isActive(["/admin/trademark"])}>
+                    <a href="trademark" class="text-white text-decoration-none">
+                        <i class="fab fa-apple"></i> Trademark
+                    </a>
+                </li>
+                <li className={isActive(["/admin/product", "/admin/add-product"])}>
+                    <a href="#colproduct" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
+                        <i class="fa fa-t-shirt"></i> Product
+                    </a>
+                    <ul class="collapse list-unstyleds" id="colproduct">
+                        <li class="nav-item">
+                            <a href="product" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> List product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="add-product" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Add product</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" onClick={logout} class="text-white text-decoration-none">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="page-content-wrapper" class="w-100">
+            <nav id='navbarmain' class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="container-fluid">
+                    <button class="btn btn-link" id="menu-toggle"><i class="fas fa-bars" onClick={openClose}></i></button>
+                    <div class="dropdown ms-auto">
+                    </div>
+            
+                    <div class="dropdown ms-3">
+                        <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="navbar-text me-2">Hello: {user?.fullname}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li onClick={logout}><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="container-fluid py-4" id='mainpageadmin'>
+                {children}
             </div>
-         </div>
-    <div class="contentadminweb">
-        <div class="headerweb" id="headerweb">
-        <div class="lichheader">
-        <img class="iconlich" src={lich} />
-        <p class="text-gray fst-italic mb-0">
-            <p id="digital-clock"></p>
-        </p>
-    </div>
-    <div class="userheader">
-        <a class="nav-link dropdown-toggle menucha" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="tendangnhap"></span>
-            <img src={avatar} class="userlogo"/>
-        </a>
-        <ul class="dropdown-menu listitemtk" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" onClick={()=>logout()} href="#"><i class="fa fa-sign-out"></i> Logout</a></li>
-        </ul>
-    </div>
-        </div>
-        <div class="contentmain">
-            {children}
         </div>
     </div>
-        </>
     );
 }
 
 async function checkAdmin(){
     var token = localStorage.getItem("token");
-    var url = 'http://localhost:8080/api/user/admin/check-role-admin';
+    var url = 'http://localhost:8080/api/admin/check-role-admin';
     const response = await fetch(url, {
         headers: new Headers({
             'Authorization': 'Bearer ' + token

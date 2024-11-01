@@ -3,7 +3,8 @@ import layoutAdmin from "../layout/admin/Layout";
 //admin
 // import homeAdmin from '../pages/admin/index'
 import AdminUser from '../page/admin/user'
-// import AdminCateory from '../pages/admin/category'
+import AdminCateory from '../page/admin/category'
+import AdminTrademark from '../page/admin/trademark'
 // import AdminProduct from '../pages/admin/product'
 // import AdminAddProduct from '../pages/admin/addproduct'
 
@@ -25,7 +26,8 @@ const publicRoutes = [
 const adminRoutes = [
     // { path: "/admin/index", component: homeAdmin, layout: layoutAdmin },
     { path: "/admin/user", component: AdminUser, layout: layoutAdmin },
-    // { path: "/admin/category", component: AdminCateory, layout: layoutAdmin },
+    { path: "/admin/category", component: AdminCateory, layout: layoutAdmin },
+    { path: "/admin/trademark", component: AdminTrademark, layout: layoutAdmin },
     // { path: "/admin/product", component: AdminProduct, layout: layoutAdmin },
     // { path: "/admin/addproduct", component: AdminAddProduct, layout: layoutAdmin },
 ];

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import ReactPaginate from 'react-paginate';
 import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import $ from 'jquery'; 
 import Swal from 'sweetalert2'
 import {getMethod,postMethodPayload, postMethod} from '../../services/request';
 
