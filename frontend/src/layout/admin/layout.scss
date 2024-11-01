@@ -519,3 +519,208 @@
 .marginauto{
     margin: auto;
 }
+
+.imgadmin{
+    width: 100px;
+}
+.iconaction {
+    font-size: 1.3rem;
+    color: #999;
+    cursor: pointer;
+    margin-right: 10px;
+}
+@keyframes barWidth {
+    0% {
+        width: 0%;
+    }
+    25% {
+        width: 50%;
+    }
+    50% {
+        width: 100%;
+    }
+    75% {
+        width: 50%;
+    }
+    100% {
+        width: 0%;
+    }
+}
+
+@keyframes barWidth2 {
+    0% {
+        width: 0%;
+    }
+    50% {
+        width: 50%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+#loading {
+    margin-top: 20px;
+    height: 4px;
+    width: 100%;
+    display: none;
+}
+
+.bar {
+    position: relative;
+    width: 0%;
+    height: 100%;
+    margin: 0 auto;
+    animation: barWidth;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.bar1 {
+    animation-delay: 0s;
+    background: #02a09a;
+    top: 0;
+    z-index: 1;
+}
+#chon-anhs{
+    height: 100px;
+}
+#anhdathem{
+    display: none;
+}
+#choose-image{
+    height: 120px;
+}
+.lbanhdathem{
+    margin-top: 30px;
+}
+.lbmotadv{
+    display: block;
+    margin-top: 50px;
+}
+
+.whitespace {
+    white-space: pre-wrap;
+ }
+.image-upload{
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+ .choose-image {
+    width: 100%;
+    height: 300px;
+    background-color: #f4f4f4;
+    border: 3px dotted #fe9900;
+    cursor: pointer;
+}
+
+.choose-image p {
+    margin: auto;
+    text-align: center;
+}
+
+#camera {
+    margin-top: 40px;
+    font-size: 20px;
+    color: #fe9900;
+}
+
+.upload-submit {
+    width: 100%;
+}
+.hidden{
+    visibility: hidden;
+}
+.border-left-1{
+    border-left: .25rem solid #4e73df;
+}
+.checkbox-custom {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* Hide the browser's default checkbox */
+
+.checkbox-custom input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+
+/* Create a custom checkbox */
+
+.checkmark-checkbox {
+    position: absolute;
+    /* top: 0; */
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #8a8a8a;
+}
+
+
+/* On mouse-over, add a grey background color */
+
+.checkbox-custom:hover input~.checkmark-checkbox {
+    background-color: #ccc;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+
+.checkbox-custom input:checked~.checkmark-checkbox {
+    background-color: #2196F3;
+}
+
+
+/* Create the checkmark/indicator (hidden when not checked) */
+
+.checkmark-checkbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+
+/* Show the checkmark when checked */
+
+.checkbox-custom input:checked~.checkmark-checkbox:after {
+    display: block;
+}
+
+
+/* Style the checkmark/indicator */
+
+.checkbox-custom .checkmark-checkbox:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.checkbox-custom {
+    display: inline-block;
+    /* margin-left: 15px; */
+}
+.header-sp-thongke{
+    margin-bottom: 30px;
+}

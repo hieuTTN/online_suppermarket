@@ -31,10 +31,7 @@ const AdminCateory = ()=>{
     const [pageCount, setpageCount] = useState(0);
     const [cate, setCate] = useState(null);
     useEffect(()=>{
-        const getCate = async() =>{
-            getCategrory();
-        };
-        getCate();
+        getCategrory();
     }, []);
 
     async function getCategrory() {
