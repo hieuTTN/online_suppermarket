@@ -60,19 +60,19 @@ public class UserApi {
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<?> loginWithGoogle(@RequestBody String credential) throws Exception {
+    public ResponseEntity<?> loginWithGoogle(@RequestBody String credential, @RequestParam Float latitude,@RequestParam Float longitude ) throws Exception {
         GoogleIdToken.Payload payload = googleOAuth2Service.verifyToken(credential);
         if(payload == null){
             throw new MessageException("Đăng nhập thất bại");
         }
-        TokenDto tokenDto = userService.loginWithGoogle(payload);
+        TokenDto tokenDto = userService.loginWithGoogle(payload,latitude, longitude);
         return new ResponseEntity(tokenDto, HttpStatus.OK);
     }
 
     /*token device get from firebase*/
     @PostMapping("/login/email")
     public TokenDto authenticate(@RequestBody LoginDto loginDto) throws Exception {
-        TokenDto tokenDto = userService.login(loginDto.getEmail(), loginDto.getPassword(), loginDto.getTokenFcm());
+        TokenDto tokenDto = userService.login(loginDto);
         return tokenDto;
     }
 

@@ -11,5 +11,9 @@ public class LoginDto {
 
     private String password;
 
+    private Float latitude;
+
+    private Float longitude;
+
     private String tokenFcm;
 }

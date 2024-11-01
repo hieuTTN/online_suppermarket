@@ -13,6 +13,7 @@ import Index from "../page/public/Index";
 import Product from "../page/public/Product";
 import Comment from "../page/public/Comment";
 import Contact from "../page/public/Contact";
+import RegisterPage from "../page/public/Register";
 
 const publicRoutes = [
     {path: "/", component: Index},
@@ -20,6 +21,7 @@ const publicRoutes = [
     {path: "/product", component: Product},
     {path: "/contact", component: Contact},
     {path: "/comment", component: Comment},
+    {path: "/register", component: RegisterPage},
 ];
 
 const adminRoutes = [

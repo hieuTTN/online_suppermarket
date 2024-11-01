@@ -41,6 +41,18 @@ public class User{
 
     private UserType userType;
 
+    private String street;
+
+    private String city;
+
+    private String state;
+
+    private String country;
+
+    private Float latitude;
+
+    private Float longitude;
+
     @ManyToOne
     @JoinColumn(name = "authority_name")
     private Authority authorities;

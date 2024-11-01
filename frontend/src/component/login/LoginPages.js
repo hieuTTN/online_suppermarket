@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {toast } from 'react-toastify';
 import '../login/Login.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -6,33 +6,6 @@ import { GoogleLogin } from '@react-oauth/google';
 import {postMethodPayload} from '../../services/request'
 import Swal from 'sweetalert2'
 
-async function handleLogin(event) {
-  event.preventDefault();
-  const payload = {
-      email: event.target.elements.email.value,
-      password: event.target.elements.password.value
-  };
-  const res = await postMethodPayload('/api/user/login/email', payload);
-  
-  var result = await res.json()
-  console.log(result);
-  if (res.status == 417) {
-      if (result.errorCode == 300) {
-          Swal.fire({
-              title: "Notification",
-              text: "Active account require!",
-              preConfirm: () => {
-                  window.location.href = 'confirm?email=' + event.target.elements.email.value
-              }
-          });
-      } else {
-          toast.warning(result.defaultMessage);
-      }
-  }
-  if(res.status < 300){
-      processLogin(result.user, result.token)
-  }
-};
 
 async function processLogin(user, token) {
   toast.success('Đăng nhập thành công!');
@@ -49,10 +22,64 @@ async function processLogin(user, token) {
 
 
 const LoginPages = () => {
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          setError(null); 
+        },
+        (err) => {
+          setError(`Error: ${err.message}`);
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by this browser.");
+    }
+  }, []);
+  console.log(location);
+
+
+  async function handleLogin(event) {
+    event.preventDefault();
+    const payload = {
+        email: event.target.elements.email.value,
+        password: event.target.elements.password.value,
+        latitude: location.latitude,
+        longitude: location.longitude,
+    };
+    const res = await postMethodPayload('/api/user/login/email', payload);
+    
+    var result = await res.json()
+    console.log(result);
+    if (res.status == 417) {
+        if (result.errorCode == 300) {
+            Swal.fire({
+                title: "Notification",
+                text: "Active account require!",
+                preConfirm: () => {
+                    window.location.href = 'confirm?email=' + event.target.elements.email.value
+                }
+            });
+        } else {
+            toast.warning(result.defaultMessage);
+        }
+    }
+    if(res.status < 300){
+        processLogin(result.user, result.token)
+    }
+  };
+  
+
   const handleLoginSuccess = async (accessToken) => {
     console.log(accessToken);
     
-    var response = await fetch('http://localhost:8080/api/user/login/google', {
+    var response = await fetch('http://localhost:8080/api/user/login/google?latitude='+location.latitude+'&longitude='+location.longitude, {
         method: 'POST',
         headers: {
             'Content-Type': 'text/plain'

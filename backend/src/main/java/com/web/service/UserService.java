@@ -2,6 +2,7 @@ package com.web.service;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.web.dto.CustomUserDetails;
+import com.web.dto.LoginDto;
 import com.web.dto.TokenDto;
 import com.web.dto.UserDto;
 import com.web.entity.Authority;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
 import java.util.*;
@@ -54,16 +56,19 @@ public class UserService {
 
 
     
-    public TokenDto login(String email, String password, String tokenFcm) throws Exception {
-        Optional<User> users = userRepository.findByEmail(email);
+    public TokenDto login(LoginDto loginDto) throws Exception {
+        Optional<User> users = userRepository.findByEmail(loginDto.getEmail());
         // check infor user
         checkUser(users);
-        if(passwordEncoder.matches(password, users.get().getPassword())){
+        if(passwordEncoder.matches(loginDto.getPassword(), users.get().getPassword())){
             CustomUserDetails customUserDetails = new CustomUserDetails(users.get());
             String token = jwtTokenProvider.generateToken(customUserDetails);
             TokenDto tokenDto = new TokenDto();
             tokenDto.setToken(token);
             tokenDto.setUser(userMapper.userToUserDto(users.get()));
+            users.get().setLatitude(loginDto.getLatitude());
+            users.get().setLongitude(loginDto.getLongitude());
+            userRepository.save(users.get());
             return tokenDto;
         }
         else{
@@ -223,13 +228,15 @@ public class UserService {
     }
 
     
-    public TokenDto loginWithGoogle(GoogleIdToken.Payload payload) {
+    public TokenDto loginWithGoogle(GoogleIdToken.Payload payload, Float latitude, Float longitude) {
         User user = new User();
         user.setEmail(payload.getEmail());
         user.setFullName(payload.get("name").toString());
         user.setActived(true);
         user.setAuthorities(authorityRepository.findByName(Contains.ROLE_USER));
         user.setCreatedDate(new Date(System.currentTimeMillis()));
+        user.setLatitude(latitude);
+        user.setLongitude(longitude);
         user.setUserType(UserType.GOOGLE);
 
         Optional<User> users = userRepository.findByEmail(user.getEmail());
@@ -244,6 +251,9 @@ public class UserService {
             TokenDto tokenDto = new TokenDto();
             tokenDto.setToken(token);
             tokenDto.setUser(userMapper.userToUserDto(users.get()));
+            users.get().setLatitude(latitude);
+            users.get().setLongitude(longitude);
+            userRepository.save(users.get());
             return tokenDto;
         }
         else{
