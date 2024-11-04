@@ -77,8 +77,7 @@ public class UserApi {
     }
 
     @PostMapping("/regis")
-    public ResponseEntity<?> regisUser(@RequestBody UserRequest userRequest) throws URISyntaxException {
-        User user = userMapper.userRequestToUser(userRequest);
+    public ResponseEntity<?> regisUser(@RequestBody User user) throws URISyntaxException {
         UserDto result= userMapper.userToUserDto(userService.regisUser(user));
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
@@ -142,13 +141,13 @@ public class UserApi {
                 .body(result);
     }
 
-    @PostMapping("/public/quen-mat-khau")
+    @PostMapping("/public/init-forgotpasss")
     public ResponseEntity<?> quenMatKhau(@RequestParam String email) throws URISyntaxException {
         userService.guiYeuCauQuenMatKhau(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/public/dat-lai-mat-khau")
+    @PostMapping("/public/finish-reset-pass")
     public ResponseEntity<?> datLaiMatKhau(@RequestParam String email, @RequestParam String key,
                                            @RequestParam String password) throws URISyntaxException {
         userService.xacNhanDatLaiMatKhau(email, password, key);

@@ -25,7 +25,7 @@ public class CategoryService {
     
     public Category save(Category category) {
         if(categoryRepository.findByName(category.getName()).isPresent()){
-            throw new MessageException("Tên danh mục đã tồn tại");
+            throw new MessageException("Category name exist");
         }
         Category result = categoryRepository.save(category);
         return result;
@@ -34,7 +34,7 @@ public class CategoryService {
     
     public Category update(Category category) {
         if(categoryRepository.findByNameAndId(category.getName(), category.getId()).isPresent()){
-            throw new MessageException("Tên danh mục đã tồn tại", 400);
+            throw new MessageException("Category name exist", 400);
         }
         Category result = categoryRepository.save(category);
         return result;

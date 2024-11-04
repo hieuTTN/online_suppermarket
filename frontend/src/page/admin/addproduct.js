@@ -122,7 +122,7 @@ const AdminAddProduct = ()=>{
         <div>
              <div class="col-sm-12 header-sps">
                     <div class="title-add-admin">
-                        <h4>Thêm/ cập nhật sản phẩm</h4>
+                        <h4>Add/ update product</h4>
                     </div>
                 </div>
                 <div class="col-sm-12">

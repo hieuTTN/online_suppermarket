@@ -8,7 +8,7 @@ import Swal from 'sweetalert2'
 
 
 async function processLogin(user, token) {
-  toast.success('Đăng nhập thành công!');
+  toast.success('Login success!');
   await new Promise(resolve => setTimeout(resolve, 1500));
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
@@ -122,15 +122,16 @@ const handleLoginError = () => {
                 <p>Don't have an account? <a href="/register">Register here</a></p>
               </div>
               <hr/>
-                    <p className='text-center'>Or login with google</p>
-                    <GoogleOAuthProvider clientId="663646080535-l004tgn5o5cpspqdglrl3ckgjr3u8nbf.apps.googleusercontent.com">
-                    <div className='divcenter' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <GoogleLogin
-                        onSuccess={handleLoginSuccess}
-                        onError={handleLoginError}
-                    />
-                    </div>
-                    </GoogleOAuthProvider>
+              <p className='text-center'>Or login with google</p>
+              <GoogleOAuthProvider clientId="663646080535-l004tgn5o5cpspqdglrl3ckgjr3u8nbf.apps.googleusercontent.com">
+              <div className='divcenter' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <GoogleLogin
+                  onSuccess={handleLoginSuccess}
+                  onError={handleLoginError}
+              />
+              </div>
+              </GoogleOAuthProvider>
+              <a href="forgot" class="text-center">forgot password ?</a>
             </div>
           </div>
         </div>

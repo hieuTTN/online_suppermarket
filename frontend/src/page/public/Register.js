@@ -1,26 +1,42 @@
-import React, { useState, useEffect } from 'react';
-const RegisterPage = () => {
-    const [location, setLocation] = useState({ latitude: null, longitude: null });
-    const [error, setError] = useState(null);
-    useEffect(() => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              setLocation({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              });
-              setError(null); 
-            },
-            (err) => {
-              setError(`Error: ${err.message}`);
+import {toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2'
+import {postMethodPayload} from '../../services/request'
+
+async function handleRegis(event) {
+    event.preventDefault();
+    if(event.target.elements.password.value != event.target.elements.repassword.value){
+        toast.error("Password not match");
+        return;
+    }
+    const payload = {
+        email: event.target.elements.email.value,
+        password: event.target.elements.password.value,
+        fullName: event.target.elements.fullName.value,
+        phone: event.target.elements.phone.value,
+        street: event.target.elements.street.value,
+        city: event.target.elements.city.value,
+        state: event.target.elements.state.value,
+        country: event.target.elements.country.value,
+    };
+    const res = await postMethodPayload('/api/user/regis',payload)
+    var result = await res.json()
+    console.log(result);
+    if (res.status == 417) {
+        toast.error(result.defaultMessage);
+    }
+    if(res.status < 300){
+        Swal.fire({
+            title: "Notification",
+            text: "Regis success! Check your email!",
+            preConfirm: () => {
+                window.location.href = 'confirm?email=' + result.email
             }
-          );
-        } else {
-          setError("Geolocation is not supported by this browser.");
-        }
-      }, []);
-      console.log(location);
+        });
+    }
+};
+
+const RegisterPage = () => {
       
     return (
         <section className="login_section layout_padding">
@@ -31,7 +47,7 @@ const RegisterPage = () => {
         <div className="row justify-content-center">
             <div className="col-md-6">
             <div className="login_box">
-                <form className='row'>
+                <form onSubmit={handleRegis} className='row'>
                     <div className='col-sm-6'>
                         <div className="input-box">
                             <label className='lb-bold'>Fullname</label>
@@ -57,7 +73,7 @@ const RegisterPage = () => {
                     <div className='col-sm-6'>
                         <div className="input-box">
                             <label className='lb-bold'>Re-password</label>
-                            <input name='password' type="password" placeholder="RePassword" required />
+                            <input name='repassword' type="password" placeholder="RePassword" required />
                         </div>
                     </div>
                     <div className='col-sm-6'>

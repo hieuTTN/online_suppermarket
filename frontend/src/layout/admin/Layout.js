@@ -69,6 +69,19 @@ function Header({ children }){
                         </li>
                     </ul>
                 </li>
+                <li className={isActive(["/admin/store", "/admin/add-store"])}>
+                    <a href="#colstore" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle text-white text-decoration-none">
+                        <i class="fa fa-map-marker"></i> Store
+                    </a>
+                    <ul class="collapse list-unstyleds" id="colstore">
+                        <li class="nav-item">
+                            <a href="store" class="text-white text-decoration-none ps-4"><i class="fa fa-list"></i> List store</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="add-store" class="text-white text-decoration-none ps-4"><i class="fa fa-plus"></i> Add store</a>
+                        </li>
+                    </ul>
+                </li>
                 <li>
                     <a href="#" onClick={logout} class="text-white text-decoration-none">
                         <i class="fa fa-sign-out"></i> Logout

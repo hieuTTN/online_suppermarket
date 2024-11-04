@@ -28,4 +28,6 @@ public class Store {
     private Float latitude;
 
     private Float longitude;
+
+    private String mapLocation;
 }

@@ -72,7 +72,7 @@ public class UserService {
             return tokenDto;
         }
         else{
-            throw new MessageException("Mật khẩu không chính xác", 400);
+            throw new MessageException("Password incorrect", 400);
         }
     }
 
@@ -82,9 +82,9 @@ public class UserService {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(exist->{
                     if(exist.getActivation_key() != null){
-                        throw new MessageException("Tài khoản chưa được kích hoạt", 330);
+                        throw new MessageException("Account not active", 330);
                     }
-                    throw new MessageException("Email đã được sử dụng", 400);
+                    throw new MessageException("Email used", 400);
                 });
         user.setCreatedDate(new Date(System.currentTimeMillis()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -94,8 +94,8 @@ public class UserService {
         Authority authority = authorityRepository.findById(Contains.ROLE_USER).get();
         user.setAuthorities(authority);
         User result = userRepository.save(user);
-        mailService.sendEmail(user.getEmail(), "Xác nhận tài khoản của bạn","Cảm ơn bạn đã tin tưởng và xử dụng dịch vụ của chúng tôi:<br>" +
-                "Để kích hoạt tài khoản của bạn, hãy nhập mã xác nhận bên dưới để xác thực tài khoản của bạn<br><br>" +
+        mailService.sendEmail(user.getEmail(), "Confirm account",
+                "Use this code to active account<br><br>" +
                 "<a style=\"background-color: #2f5fad; padding: 10px; color: #fff; font-size: 18px; font-weight: bold;\">"+user.getActivation_key()+"</a>",false, true);
         return result;
     }
@@ -105,9 +105,9 @@ public class UserService {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(exist->{
                     if(exist.getActivation_key() != null){
-                        throw new MessageException("Tài khoản chưa được kích hoạt", 330);
+                        throw new MessageException("Account not active", 330);
                     }
-                    throw new MessageException("Ẻmail đã được sử dụng", 400);
+                    throw new MessageException("Email used", 400);
                 });
         user.setCreatedDate(new Date(System.currentTimeMillis()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -129,20 +129,20 @@ public class UserService {
             return;
         });
         if(user.isEmpty()){
-            throw new MessageException("email hoặc mã xác nhận không chính xác", 404);
+            throw new MessageException("Email or confirmation code is incorrect", 404);
         }
     }
 
     
     public Boolean checkUser(Optional<User> users){
         if(users.isPresent() == false){
-            throw new MessageException("Không tìm thấy tài khoản", 404);
+            throw new MessageException("Account not found", 404);
         }
         else if(users.get().getActivation_key() != null && users.get().getActived() == false){
-            throw new MessageException("Tài khoản chưa được kích hoạt", 300);
+            throw new MessageException("Account not acctive", 300);
         }
         else if(users.get().getActived() == false && users.get().getActivation_key() == null){
-            throw new MessageException("Tài khoản đã bị khóa", 500);
+            throw new MessageException("Account locked", 500);
         }
         return true;
     }
@@ -207,10 +207,9 @@ public class UserService {
         user.get().setRememberKey(random);
         userRepository.save(user.get());
 
-        mailService.sendEmail(email, "Đặt lại mật khẩu","Cảm ơn bạn đã tin tưởng và xử dụng dịch vụ của chúng tôi:<br>" +
-                "Chúng tôi đã tạo một mật khẩu mới từ yêu cầu của bạn<br>" +
-                "Hãy lick vào bên dưới để đặt lại mật khẩu mới của bạn<br><br>" +
-                "<a href='http://localhost:8080/datlaimatkhau?email="+email+"&key="+random+"' style=\"background-color: #2f5fad; padding: 10px; color: #fff; font-size: 18px; font-weight: bold;\">Đặt lại mật khẩu</a>",false, true);
+        mailService.sendEmail(email, "Forgot password",
+                "Click below to reset your new password<br><br>" +
+                "<a href='http://localhost:3000/resetpassword?email="+email+"&key="+random+"' style=\"background-color: #2f5fad; padding: 10px; color: #fff; font-size: 18px; font-weight: bold;\">Reset Password</a>",false, true);
 
     }
 
@@ -223,7 +222,7 @@ public class UserService {
             userRepository.save(user.get());
         }
         else{
-            throw new MessageException("Mã xác thực không chính xác");
+            throw new MessageException("Activation key incorrect");
         }
     }
 
@@ -244,7 +243,7 @@ public class UserService {
 
         if(users.isPresent()){
             if(users.get().getActived() == false){
-                throw new MessageException("Tài khoản đã bị khóa");
+                throw new MessageException("Account locked");
             }
             CustomUserDetails customUserDetails = new CustomUserDetails(users.get());
             String token = jwtTokenProvider.generateToken(customUserDetails);
