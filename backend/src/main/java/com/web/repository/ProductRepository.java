@@ -37,6 +37,9 @@ public interface ProductRepository extends JpaRepository<Product,Long>, JpaSpeci
     @Query("select p from Product p where p.name like ?1 or p.category.name like ?1")
     public Page<Product> findByParam(String param, Pageable pageable);
 
+    @Query("select p from Product p where p.name like ?1 or p.category.name like ?1 or p.tradeMark.name like ?1 ")
+    public List<Product> findByParamLimit(String param, Pageable pageable);
+
     @Query("select p from Product p where (p.name like ?1 or p.category.name like ?1) and p.price >= ?2 and p.price <= ?3")
     public Page<Product> searchFull(String param, Double small, Double large, Pageable pageable);
 

@@ -66,6 +66,30 @@ const Product = () => {
     setTrademark(result)
   }
 
+  async function filterProduct() {
+    var arrCategory = [];
+    var arrTrademark = [];
+    for(var i=0; i<selectedCategory.length; i++){
+      arrCategory.push(selectedCategory[i].id)
+    }
+    for(var i=0; i<selectedTrademark.length; i++){
+      arrTrademark.push(selectedTrademark[i].id)
+    }
+    var obj = {
+      categoryId:arrCategory,
+      tradeMarkId:arrTrademark,
+      minPrice:price[0],
+      maxPrice:price[1],
+    }
+    setPayload(obj)
+    var response = await postMethodPayload('/api/product/public/find-search-full?size='+sizepro+'&sort=id,desc&page='+0, obj);
+    var result = await response.json();
+    setItemProduct(result.content)
+    setpageCount(result.totalPages)
+    url = '/api/product/public/find-search-full?size='+sizepro+'&sort=id,desc&page='
+  }
+
+
   return (
     <div className='container'>
       <div className='row contentpage'>
@@ -108,7 +132,7 @@ const Product = () => {
           />
 
           <br/><br/>
-          <button className='btn btn-primary form-control'>Filter</button>
+          <button onClick={filterProduct} className='btn btn-primary form-control'>Filter</button>
       </div>
       <div className='col-sm-8'>
         <section className="shop_section layout_padding">
@@ -122,7 +146,7 @@ const Product = () => {
                         <img src={product.imageBanner} alt={product.name} />
                       </div>
                       <div className="detail-box">
-                        <h6>{product.name}</h6>
+                        <h6 className='product-name'>{product.name}</h6>
                         <h6>
                           <span>${product.price}</span>
                         </h6>

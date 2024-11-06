@@ -10,6 +10,7 @@ export const HeaderContext = createContext();
 function Header (){
   var [numCart, setNumCart] = useState(0);
   const [categories, setCategories] = useState([]);
+  const [productItem, setProductItem] = useState([]);
   useEffect(()=>{
   const getNumCart = async() =>{
       const response = await getMethod('/api/cart/user/count-cart');
@@ -37,6 +38,17 @@ function Header (){
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       window.location.replace('login')
+  }
+
+  async function openSearch(){
+    var search = document.getElementById("searchinput").value
+    if(search == ""){
+      setProductItem([])
+      return;
+    }
+    var response = await getMethod('/api/product/public/find-by-param?size=10&search='+search);
+    var result = await response.json();
+    setProductItem(result)
   }
 
   var token = localStorage.getItem('token');
@@ -78,10 +90,19 @@ function Header (){
               </ul>
             </li>
           </ul>
-          <form action='product' class="searchheader d-flex">
-              <input name='search' placeholder="Search product?" class="inputsearchheader" />
+          <div action='product' class="searchheader d-flex">
+              <span class="nav-item dropdown pointermenu gvs itemsearchheader">
+                  <span className='nav-link dropdown-toggle dropdownsearch' href="#" id="navbarDropdownSearch" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  </span>
+                  <ul className={productItem.length == 0?'dropdown-menu':'dropdown-menu show'} id='listproductsearch' aria-labelledby="navbarDropdownSearch">
+                    {productItem.map((item, index)=>{
+                      return <li><a class="dropdown-item" href={'detail?category='+item.id}>{item.name}</a></li>
+                    })}
+                  </ul>
+              </span>
+              <input onKeyUp={openSearch} id='searchinput' placeholder="Search product?" class="inputsearchheader" />
               <button class="btnsearchheader"><i class="fa fa-search"></i></button>
-          </form>
+          </div>
           <div className='d-flex'>
             <a href="store" class="pointermenu gvs navlink"><i class="fa fa-map-marker"></i> Stores address</a>
           </div>

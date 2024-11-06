@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -59,5 +60,13 @@ public class ProductService {
     public Page<Product> searchFull(ProductSearch productSearch, Pageable pageable) {
         ProductSpecification productSpecification = new ProductSpecification(productSearch.getCategoryId(), productSearch.getTradeMarkId(), productSearch.getMinPrice(), productSearch.getMaxPrice());
         return productRepository.findAll(productSpecification, pageable);
+    }
+
+    public List<Product> findByParam(String search, Pageable pageable) {
+        if(search == null){
+            search = "";
+        }
+        search = "%"+search+"%";
+        return productRepository.findByParamLimit(search, pageable);
     }
 }

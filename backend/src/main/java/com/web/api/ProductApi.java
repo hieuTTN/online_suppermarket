@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/product")
 @CrossOrigin
@@ -43,6 +45,13 @@ public class ProductApi {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/public/find-by-param")
+    public ResponseEntity<?> findByParam(@RequestParam(required = false) String search, Pageable pageable) {
+        List<Product> response = productService.findByParam(search, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @DeleteMapping("/admin/delete")
     public ResponseEntity<?> delete(@RequestParam("id") Long id) {
         productService.delete(id);
@@ -54,4 +63,6 @@ public class ProductApi {
         Page<Product> response = productService.searchFull(productSearch, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 }
