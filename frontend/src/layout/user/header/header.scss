@@ -1,0 +1,126 @@
+body{
+    background-color: #fafafa;
+}
+#headerweb{
+    background-color: #fff;
+    padding-bottom: 20px;
+    box-shadow: 0 4px 2px -2px gray;
+}
+.subheader{
+    background-color: #fff;
+    height: 35px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.subcontainerheader{
+    position: relative;
+}
+.subcontainerheader ul{
+    list-style: none;
+    position: absolute;
+    right: 0;
+    margin: 0;
+    padding: 0 10px 0 0;
+}
+.subcontainerheader ul li{
+    float: left;
+    margin-left: 15px;
+}
+.subcontainerheader ul li a{
+    color: #000;
+    font-size: 12px;
+    text-decoration: none;
+    font-weight: 500;
+}
+.headertop{
+    padding-top: 15px;
+}
+.logoheader{
+    height: 80px;
+    margin-top: -10px;
+}
+.btnkiemtradh{
+    display: block;
+    background: #00483e;
+    border-radius: 10px;
+    padding: 6px 8px;
+    box-shadow: 0 4px 6px #ccc;
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    position: relative;
+    text-decoration: none;
+    min-height: 40px;
+}
+.btnkiemtradh:hover{
+    color: #fff;
+    background-color: #008c76;
+}
+.btnkiemtradh i {
+    font-size: 30px;
+    position: absolute;
+    left: 8px;
+}
+.btnkiemtradh .text {
+    text-align: left;
+    display: block;
+    margin-left: 40px;
+}
+.imgcartheader{
+    width: 28px;
+}
+.shoppingcartheader{
+    position: relative;
+}
+.cart-total{
+    text-align: center;
+    background: #ff6801;
+    font-size: 12px;
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    padding: 1px;
+    color: #fff;
+    margin-right: 5px;
+}
+.shopingcontentcart{
+    position: absolute;
+    right: 0;
+}
+.searchheader{
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 5px 10px;
+    box-shadow: 0 4px 6px #ccc;
+    position: relative;
+}
+.inputsearchheader{
+    border: none;
+    width: 80%;
+}
+.inputsearchheader:focus{
+    outline: none;
+}
+.btnsearchheader{
+    position: absolute;
+    right: 10px;
+    top:-7px;
+    background: #00483d;
+    background-image: linear-gradient(#00917a,#00483d);
+    border: none;
+    border-radius: 17px;
+    width: 42px;
+    height: 42px;
+    outline: none;
+    font-size: 17px;
+    color: #fff;
+}
+.gvs {
+    margin-right: 10px;
+    margin-left: 10px;
+    text-decoration: none;
+}
+
+.pointermenu {
+    color: #514f4f;
+}

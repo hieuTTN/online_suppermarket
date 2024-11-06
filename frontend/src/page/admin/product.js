@@ -86,7 +86,7 @@ const AdminProduct = ()=>{
                                     <td>{item.id}</td>
                                     <td><img src={item.imageBanner} className='imgadmin'/></td>
                                     <td>{item.name}</td>
-                                    <td>{formatMoney(item.price)}</td>
+                                    <td>{item.price} $</td>
                                     <td>{item.unit}</td>
                                     <td>{item.tradeMark?.name}</td>
                                     <td>{item.category?.name}</td>

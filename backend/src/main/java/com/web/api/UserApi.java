@@ -118,6 +118,11 @@ public class UserApi {
         System.out.println("user");
     }
 
+    @GetMapping("/user/user-logged")
+    public User userLogged(){
+        return userService.userLogged();
+    }
+
     @PostMapping("/admin/lockOrUnlockUser")
     public void activeOrUnactiveUser(@RequestParam("id") Long id){
         User user = userRepository.findById(id).get();

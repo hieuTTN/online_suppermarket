@@ -24,6 +24,12 @@ public class ProductApi {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @GetMapping("/public/findById")
+    public ResponseEntity<?> findById(@RequestParam("id") Long id) {
+        Product result = productService.findById(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @GetMapping("/admin/findById")
     public ResponseEntity<?> findByIdForAdmin(@RequestParam("id") Long id) {
         Product response = productService.findById(id);
@@ -33,7 +39,7 @@ public class ProductApi {
     @GetMapping("/public/find-all-page")
     public ResponseEntity<?> findByAdmin(Pageable pageable) {
         Page<Product> response = productService.findAll(pageable);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/delete")

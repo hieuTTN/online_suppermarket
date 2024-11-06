@@ -19,6 +19,8 @@ import RegisterPage from "../page/public/Register";
 import ConfirmPage from "../page/public/Confirm";
 import ForgotPage from "../page/public/Forgotpass";
 import ResetPassPage from "../page/public/ResetPass";
+import DetailProduct from "../page/public/detail";
+import Cart from "../page/public/Cart";
 
 const publicRoutes = [
     {path: "/", component: Index},
@@ -30,6 +32,8 @@ const publicRoutes = [
     {path: "/confirm", component: ConfirmPage},
     {path: "/forgot", component: ForgotPage},
     {path: "/resetpassword", component: ResetPassPage},
+    {path: "/detail", component: DetailProduct},
+    {path: "/cart", component: Cart},
 ];
 
 const adminRoutes = [

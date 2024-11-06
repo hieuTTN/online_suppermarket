@@ -265,4 +265,8 @@ public class UserService {
             return tokenDto;
         }
     }
+
+    public User userLogged() {
+        return userUtils.getUserWithAuthority();
+    }
 }
