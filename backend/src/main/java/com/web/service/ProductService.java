@@ -1,5 +1,7 @@
 package com.web.service;
 
+import com.web.dto.ProductSearch;
+import com.web.dto.ProductSpecification;
 import com.web.entity.*;
 import com.web.exception.MessageException;
 import com.web.repository.*;
@@ -54,5 +56,8 @@ public class ProductService {
         return exist.get();
     }
 
-    
+    public Page<Product> searchFull(ProductSearch productSearch, Pageable pageable) {
+        ProductSpecification productSpecification = new ProductSpecification(productSearch.getCategoryId(), productSearch.getTradeMarkId(), productSearch.getMinPrice(), productSearch.getMaxPrice());
+        return productRepository.findAll(productSpecification, pageable);
+    }
 }

@@ -21,6 +21,8 @@ import ForgotPage from "../page/public/Forgotpass";
 import ResetPassPage from "../page/public/ResetPass";
 import DetailProduct from "../page/public/detail";
 import Cart from "../page/public/Cart";
+import AccountPage from "../page/public/Account";
+import StorePage from "../page/public/Store";
 
 const publicRoutes = [
     {path: "/", component: Index},
@@ -34,6 +36,8 @@ const publicRoutes = [
     {path: "/resetpassword", component: ResetPassPage},
     {path: "/detail", component: DetailProduct},
     {path: "/cart", component: Cart},
+    {path: "/account", component: AccountPage},
+    {path: "/store", component: StorePage},
 ];
 
 const adminRoutes = [

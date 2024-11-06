@@ -1,5 +1,6 @@
 package com.web.api;
 
+import com.web.dto.ProductSearch;
 import com.web.entity.Product;
 import com.web.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,4 +49,9 @@ public class ProductApi {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/public/find-search-full")
+    public ResponseEntity<?> searchFull(@RequestBody ProductSearch productSearch, Pageable pageable) {
+        Page<Product> response = productService.searchFull(productSearch, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

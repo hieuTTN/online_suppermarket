@@ -42,7 +42,7 @@ public class ProductSpecification implements Specification<Product> {
         if (maxPrice != null) {
             predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("price"), maxPrice));
         }
-        predicate = cb.and(predicate, cb.notEqual(root.get("deleted"), true));
+//        predicate = cb.and(predicate, cb.notEqual(root.get("deleted"), true));
         return predicate;
     }
 }

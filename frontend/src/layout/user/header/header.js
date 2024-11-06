@@ -9,7 +9,7 @@ export const HeaderContext = createContext();
 
 function Header (){
   var [numCart, setNumCart] = useState(0);
-
+  const [categories, setCategories] = useState([]);
   useEffect(()=>{
   const getNumCart = async() =>{
       const response = await getMethod('/api/cart/user/count-cart');
@@ -23,7 +23,14 @@ function Header (){
   if(token != null){
       getNumCart();
   }
+  getCategory();
   }, []);
+
+  async function getCategory() {
+    var response = await getMethod('/api/category/public/findAll-list');
+    var result = await response.json();
+    setCategories(result)
+  }
   
 
   function logout(){
@@ -42,11 +49,12 @@ function Header (){
               <li><a class="dropdown-item" href="account">Information</a></li>
               <li onClick={logout}><a class="dropdown-item" href="#">Logout</a></li>
           </ul>
-      </span></>
+      </span>
+      </>
   }
     return(
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
+      <div class="container">
         <a class="navbar-brand" href="/">SUPER MARKET ONLINE</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -54,7 +62,7 @@ function Header (){
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="contact">Contact</a>
@@ -64,10 +72,9 @@ function Header (){
                 Category
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"/></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                {categories.map((item, index)=>{
+                  return <li><a class="dropdown-item" href={'product?category='+item.id}>{item.name}</a></li>
+                })}
               </ul>
             </li>
           </ul>
@@ -76,7 +83,7 @@ function Header (){
               <button class="btnsearchheader"><i class="fa fa-search"></i></button>
           </form>
           <div className='d-flex'>
-            <a href="login" class="pointermenu gvs navlink"><i class="fa fa-map-marker"></i> Stores address</a>
+            <a href="store" class="pointermenu gvs navlink"><i class="fa fa-map-marker"></i> Stores address</a>
           </div>
           <div className='d-flex'>
             {authen}

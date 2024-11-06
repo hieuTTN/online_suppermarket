@@ -432,14 +432,6 @@ a:focus {
 }
 
 .shop_section .btn-box a {
-  display: inline-block;
-  padding: 10px 40px;
-  background-color: #f16179;
-  color: #ffffff;
-  border: 1px solid #f16179;
-  border-radius: 5px;
-  -webkit-transition: all .3s;
-  transition: all .3s;
 }
 
 .shop_section .btn-box a:hover {

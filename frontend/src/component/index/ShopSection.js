@@ -2,6 +2,7 @@ import React from 'react';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect } from 'react'
 import {getMethod} from '../../services/request'
+import ReactPaginate from 'react-paginate';
 
 var sizepro = 12
 var url = '';
@@ -10,15 +11,24 @@ function ShopSection() {
   const [pageCount, setpageCount] = useState(0);
   useEffect(()=>{
     getProduct();
-}, []);
+  }, []);
 
-async function getProduct() {
-  var response = await getMethod('/api/product/public/find-all-page?size='+sizepro+'&sort=id,desc&page='+0);
-  var result = await response.json();
-  setItemProduct(result.content)
-  setpageCount(result.totalPages)
-  url = '/api/product/public/find-all-page?size='+sizepro+'&sort=id,desc&page='
+  async function getProduct() {
+    var response = await getMethod('/api/product/public/find-all-page?size='+sizepro+'&sort=id,desc&page='+0);
+    var result = await response.json();
+    setItemProduct(result.content)
+    setpageCount(result.totalPages)
+    url = '/api/product/public/find-all-page?size='+sizepro+'&sort=id,desc&page='
+  }
+
+  const handlePageClick = async (data)=>{
+    var currentPage = data.selected
+    var response = await getMethod(url+currentPage)
+    var result = await response.json();
+    setItemProduct(result.content)
+    setpageCount(result.totalPages)
 }
+
 
   return (
     <section className="shop_section layout_padding">
@@ -27,8 +37,6 @@ async function getProduct() {
           <h2>Latest Products</h2>
         </div>
         <div className="row">
-        {itemProduct.map((item, index)=>{
-           })}
           {itemProduct.map((product, index) => (
             <div className="col-sm-6 col-md-4 col-lg-3" key={index}>
               <div className="box">
@@ -51,7 +59,22 @@ async function getProduct() {
           ))}
         </div>
         <div className="btn-box">
-          <a href="#">View All Products</a>
+        <ReactPaginate 
+            marginPagesDisplayed={2} 
+            pageCount={pageCount} 
+            onPageChange={handlePageClick}
+            containerClassName={'pagination'} 
+            pageClassName={'page-item'} 
+            pageLinkClassName={'page-link'}
+            previousClassName='page-item'
+            previousLinkClassName='page-link'
+            nextClassName='page-item'
+            nextLinkClassName='page-link'
+            breakClassName='page-item'
+            breakLinkClassName='page-link' 
+            previousLabel='Trang trước'
+            nextLabel='Trang sau'
+            activeClassName='active'/>
         </div>
       </div>
     </section>

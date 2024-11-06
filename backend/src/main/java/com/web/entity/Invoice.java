@@ -1,5 +1,7 @@
 package com.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.web.enums.StatusInvoice;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "invoice")
@@ -33,6 +36,13 @@ public class Invoice {
 
     private String note;
 
+    @Enumerated(EnumType.STRING)
+    private StatusInvoice statusInvoice;
+
     @ManyToOne
     private User user;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<InvoiceStatus> invoiceStatuses;
 }

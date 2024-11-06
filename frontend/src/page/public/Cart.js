@@ -62,11 +62,10 @@ function Cart(){
             return;
         }
         var orderDto = {
-            "payType": "COD",
             "fullname": document.getElementById("fullname").value,
             "phone": document.getElementById("phone").value,
-            "address": document.getElementById("diachinhan").value,
-            "note": document.getElementById("ghichudonhang").value,
+            "address": document.getElementById("address").value,
+            "note": document.getElementById("note").value,
         }
         var res = await postMethodPayload('/api/invoice/user/create', orderDto)
         if (res.status < 300) {
@@ -162,10 +161,10 @@ function Cart(){
                             <input defaultValue={user==null?'':user.phone} id="phone" class="form-control fomd"/>
 
                             <label className='lbcheckout'>Recipient address</label>
-                            <input id="diachinhan" class="form-control fomd"/>
+                            <input id="address" class="form-control fomd"/>
 
                             <label className='lbcheckout'>Note</label>
-                            <textarea id="ghichudonhang" class="form-control fomd"></textarea>
+                            <textarea id="note" class="form-control fomd"></textarea>
                         </div>
                         <div className='col-sm-6'>
                             <table className='table table-borderless'>

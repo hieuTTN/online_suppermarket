@@ -245,3 +245,44 @@ tr {
     font-weight: 500;
     margin-top: 10px;
 }
+.contentaccount{
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+.tabdv{
+    cursor: pointer;
+    margin-top: 20px;
+    padding: 5px;
+    border-radius: 5px;
+}
+.activetabdv{
+    background-color: #dedede;
+}
+.totalInvoice{
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.huydon{
+    color: gray;
+    cursor: pointer;
+}
+.imgdetailhd{
+    width: 100px;
+}
+.iconcancel{
+    margin-left: 20px;
+    cursor: pointer;
+}
+.pointer{
+    cursor: pointer;
+}
+.contentpage{
+    margin-top: 40px;
+}
+.single-store{
+    margin-top: 30px;
+}
+.single-store iframe{
+    width: 100%;
+    height: 400px;
+}

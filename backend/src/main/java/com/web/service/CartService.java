@@ -84,4 +84,9 @@ public class CartService{
         }
         return total;
     }
+
+    public void deleteByUser() {
+        User user = userUtils.getUserWithAuthority();
+        cartRepository.deleteByUser(user.getId());
+    }
 }

@@ -97,7 +97,7 @@ const addToCart = async () => {
         document.getElementById("numbercartheader").innerHTML = numc
     }
     else{
-        toast.warning("Hãy đăng nhập");
+        toast.warning("Please login");
     }
 };
 
@@ -109,7 +109,7 @@ const muaNgay = async () => {
         window.location.href = 'cart'
     }
     else{
-        toast.warning("Hãy đăng nhập");
+        toast.warning("Please login");
     }
 };
 
