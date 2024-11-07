@@ -33,6 +33,8 @@ public class Product {
 
     private String unit;
 
+    private Integer quantity;
+
     @ManyToOne
     @JoinColumn(name = "trademark_id")
     private TradeMark tradeMark;

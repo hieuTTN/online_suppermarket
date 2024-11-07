@@ -28,6 +28,7 @@ async function saveProduct(event) {
         "imageBanner": linkbanner,
         "price": event.target.elements.price.value,
         "unit": event.target.elements.unit.value,
+        "quantity": event.target.elements.quantity.value,
         "description": description,
         "category": {
             "id":event.target.elements.category.value
@@ -136,6 +137,8 @@ const AdminAddProduct = ()=>{
                                 <input name="price" defaultValue={product?.price} class="form-control"/>
                                 <label class="lb-form">Unit</label>
                                 <input name="unit" defaultValue={product?.unit} class="form-control"/>
+                                <label class="lb-form">Quantity</label>
+                                <input name="quantity" defaultValue={product?.quantity} class="form-control"/>
                                 <label class="lb-form">Category</label>
                                 <Select
                                     className="select-container" 

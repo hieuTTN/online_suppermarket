@@ -49,9 +49,9 @@ public class InvoiceService {
         User user = userUtils.getUserWithAuthority();
         for(Cart p : cartRepository.findByUser(user.getId())){
             totalAmount += p.getProduct().getPrice() * p.getQuantity();
-//            if(p.getQuantity() > p.getProduct().getQuantity()){
-//                throw new MessageException("Sản phẩm "+p.getProduct().getName()+" chỉ còn "+p.getProduct().getQuantity()+" sản phẩm");
-//            }
+            if(p.getQuantity() > p.getProduct().getQuantity()){
+                throw new MessageException("Product "+p.getProduct().getName()+" only has "+p.getProduct().getQuantity()+" product left");
+            }
         }
         Invoice invoice = new Invoice();
         invoice.setNote(invoiceRequest.getNote());
