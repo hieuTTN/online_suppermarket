@@ -72,6 +72,8 @@ public class InvoiceService {
             invoiceDetail.setPrice(p.getProduct().getPrice());
             invoiceDetail.setQuantity(p.getQuantity());
             invoiceDetailRepository.save(invoiceDetail);
+            p.getProduct().setQuantity(p.getProduct().getQuantity() - p.getQuantity());
+            productRepository.save(p.getProduct());
         }
 
         InvoiceStatus invoiceStatus = new InvoiceStatus();
