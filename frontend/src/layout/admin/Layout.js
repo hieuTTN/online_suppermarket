@@ -82,6 +82,11 @@ function Header({ children }){
                         </li>
                     </ul>
                 </li>
+                <li className={isActive(["/admin/order"])}>
+                    <a href="order" class="text-white text-decoration-none">
+                        <i class="fa fa-list"></i> Order
+                    </a>
+                </li>
                 <li>
                     <a href="#" onClick={logout} class="text-white text-decoration-none">
                         <i class="fa fa-sign-out"></i> Logout

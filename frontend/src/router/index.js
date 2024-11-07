@@ -8,6 +8,7 @@ import AdminProduct from '../page/admin/product'
 import AdminAddProduct from '../page/admin/addproduct'
 import AdminStore from '../page/admin/store'
 import AdminAddStore from '../page/admin/addstore'
+import AdminInvoice from '../page/admin/order'
 
 //public
 import LoginPage from "../page/public/LoginPage";
@@ -49,6 +50,7 @@ const adminRoutes = [
     { path: "/admin/add-product", component: AdminAddProduct, layout: layoutAdmin },
     { path: "/admin/store", component: AdminStore, layout: layoutAdmin },
     { path: "/admin/add-store", component: AdminAddStore, layout: layoutAdmin },
+    { path: "/admin/order", component: AdminInvoice, layout: layoutAdmin },
 ];
 
 

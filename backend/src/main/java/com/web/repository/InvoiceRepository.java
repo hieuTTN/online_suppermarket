@@ -19,7 +19,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
     public List<Invoice> findByUser(Long userId);
 
     @Query("select i from Invoice i where i.createdDate >= ?1 and i.createdDate <= ?2")
-    public List<Invoice> findByDate(Date from, Date to);
+    public Page<Invoice> findByDate(Date from, Date to, Pageable pageable);
 
     @Query(value = "select sum(i.total_amount) from invoice i where Month(i.created_date) = ?1 and Year(i.created_date) = ?2 and (i.pay_type = 0 or i.status_invoice = ?3)", nativeQuery = true)
     public Double calDt(Integer thang, Integer month, Integer index);
@@ -33,5 +33,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
     public Double numInvoiceToDay(Date ngay, Integer index);
 
     @Query("select i from Invoice i where i.createdDate >= ?1 and i.createdDate <= ?2 and i.statusInvoice = ?3")
-    List<Invoice> findByDateAndStatus(Date from, Date to, StatusInvoice statusInvoice);
+    Page<Invoice> findByDateAndStatus(Date from, Date to, StatusInvoice statusInvoice, Pageable pageable);
 }

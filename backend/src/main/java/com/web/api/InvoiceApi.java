@@ -47,8 +47,8 @@ public class InvoiceApi {
     @GetMapping("/admin/find-all")
     public ResponseEntity<?> findAll(@RequestParam(value = "from",required = false) Date from,
                                      @RequestParam(value = "to",required = false) Date to,
-                                     @RequestParam(value = "status",required = false) StatusInvoice statusInvoice){
-        List<Invoice> result = invoiceService.findAllFull(from, to, statusInvoice);
+                                     @RequestParam(value = "status",required = false) StatusInvoice statusInvoice, Pageable pageable){
+        Page<Invoice> result = invoiceService.findAllFull(from, to, statusInvoice,pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

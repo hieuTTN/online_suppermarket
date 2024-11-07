@@ -8,6 +8,8 @@ import com.web.exception.MessageException;
 import com.web.repository.*;
 import com.web.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -115,19 +117,24 @@ public class InvoiceService {
         invoiceStatus.setCreatedBy(userUtils.getUserWithAuthority());
         invoiceStatus.setCreatedDate(LocalDateTime.now());
         invoiceStatusRepository.save(invoiceStatus);
+        List<InvoiceDetail> invoiceDetails = invoiceDetailRepository.findByInvoiceId(invoiceId);
+        for(InvoiceDetail i : invoiceDetails){
+            i.getProduct().setQuantity(i.getProduct().getQuantity() + i.getQuantity());
+            productRepository.save(i.getProduct());
+        }
     }
 
-    public List<Invoice> findAllFull(Date from, Date to, StatusInvoice statusInvoice) {
-        List<Invoice> list = null;
+    public Page<Invoice> findAllFull(Date from, Date to, StatusInvoice statusInvoice, Pageable pageable) {
+        Page<Invoice> list = null;
         if(from == null || to == null){
             from = Date.valueOf("2000-01-01");
             to = Date.valueOf("2200-01-01");
         }
         if(statusInvoice == null){
-            list = invoiceRepository.findByDate(from, to);
+            list = invoiceRepository.findByDate(from, to,pageable);
         }
         if(statusInvoice != null){
-            list = invoiceRepository.findByDateAndStatus(from, to, statusInvoice);
+            list = invoiceRepository.findByDateAndStatus(from, to, statusInvoice,pageable);
         }
         return list;
     }

@@ -15,6 +15,7 @@ async function checkUser(){
 function AccountPage(){
     const [items, setItems] = useState([]);
     const [itemDetail, setItemDetail] = useState([]);
+    const [item, setItem] = useState(null);
     useEffect(()=>{
         checkUser();
         getInvoice();
@@ -35,10 +36,11 @@ function AccountPage(){
         e.target.classList.add('activetabdv')
     }
 
-    const getInvoiceDetail = async(id) =>{
-        var response = await getMethod('/api/invoice-detail/user/find-by-invoice?idInvoice='+id)
+    const getInvoiceDetail = async(item) =>{
+        var response = await getMethod('/api/invoice-detail/user/find-by-invoice?idInvoice='+item.id)
         var list = await response.json();
         setItemDetail(list);
+        setItem(item)
       };
 
     const cancelInvoice = async(id) =>{
@@ -112,7 +114,7 @@ function AccountPage(){
                                     <td>
                                     {(item.statusInvoice == "WAITING" || item.statusInvoice== "CONFIRMED")?
                                     <i onClick={()=>cancelInvoice(item.id)} class="fa fa-trash pointer"></i>:''}
-                                    <i onClick={()=>getInvoiceDetail(item.id)} data-bs-toggle="modal" data-bs-target="#modaldeail" className='fa fa-eye iconcancel'></i>
+                                    <i onClick={()=>getInvoiceDetail(item)} data-bs-toggle="modal" data-bs-target="#modaldeail" className='fa fa-eye iconcancel'></i>
                                     </td>
                                 </tr>
                                 })}
@@ -146,6 +148,55 @@ function AccountPage(){
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="row headerdetail">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                            <br/><span>Order date: <span class="yls">{item?.createdDate}</span></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                            <br/><span>Current Order Status: <span class="yls">{item?.statusInvoice}</span></span>
+                        </div>
+                    </div>
+                    <div class="row shipinfor">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <span class="ttshipinfor">Address</span>
+                            <div class="blockinfor">
+                                <p class="reciverName">{item?.receiverName}</p>
+                                <span>Delivery address: <span>{item?.address}</span></span>
+                                <br/><span class="phoneacc">Phone: <span>{item?.phone}</span></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+                            <span class="ttshipinfor">Payment</span>
+                            <div class="blockinfor">
+                                <span id="loaithanhtoan">Payment upon receipt </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+                            <span class="ttshipinfor">Note</span>
+                            <div class="blockinfor">
+                                <span id="ghichunh">{item?.note}</span>
+                            </div>
+                        </div>
+                    </div><br/>
+                    <h5>Orders Status</h5>
+                    <table className='table table-bordered'>
+                        <thead>
+                            <tr>
+                                <th>Created date</th>
+                                <th>Status</th>
+                                <th>Created by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {item?.invoiceStatuses.map((stt, index)=>{
+                                return <tr>
+                                    <td>{stt.createdDate}</td>
+                                    <td>{stt.statusInvoice}</td>
+                                    <td>{stt.createdBy.email}</td>
+                                </tr>
+                            })}
+                        </tbody>
+                    </table>
                     <table class="table table-cart table-order" id="detailInvoice">
                         <thead class="thead-default theaddetail">
                             <tr>
