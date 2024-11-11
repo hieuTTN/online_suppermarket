@@ -352,3 +352,22 @@ tr {
 .imgdetailacc {
     width: 100px;
 }
+.vnpayimg{
+    width: 50px;
+}
+
+#thatbai{
+    text-align: center;margin-top: 15px; display: none;
+}
+#thatbai p{
+    margin-top: 15px;
+}
+#thanhcong{
+    text-align: center;margin-top: 15px; line-height: 25px;
+}
+#thanhcong h3{
+    font-size: 25px;
+}
+#thanhcong p{
+    margin-top: 15px;
+}

@@ -3,10 +3,12 @@ package com.web.service;
 import com.nimbusds.openid.connect.sdk.assurance.evidences.Voucher;
 import com.web.dto.InvoiceRequest;
 import com.web.entity.*;
+import com.web.enums.PayType;
 import com.web.enums.StatusInvoice;
 import com.web.exception.MessageException;
 import com.web.repository.*;
 import com.web.utils.UserUtils;
+import com.web.vnpay.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +48,25 @@ public class InvoiceService {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private HistoryPayRepository historyPayRepository;
+
+    @Autowired
+    private VNPayService vnPayService;
+
     public void create(InvoiceRequest invoiceRequest) throws Exception {
+        if(invoiceRequest.getPayType() != null && invoiceRequest.getPayType().equals(PayType.VNPAY)){
+            if(invoiceRequest.getVnpOrderInfo() == null){
+                throw new MessageException("vnpay order infor require");
+            }
+            if(historyPayRepository.findByOrderIdAndRequestId(invoiceRequest.getVnpOrderInfo(), invoiceRequest.getVnpOrderInfo()).isPresent()){
+                throw new MessageException("Payment paid");
+            }
+            int paymentStatus = vnPayService.orderReturnByUrl(invoiceRequest.getUrlVnpay());
+            if(paymentStatus != 1){
+                throw new MessageException("Payment error");
+            }
+        }
         Double totalAmount = 0D;
         User user = userUtils.getUserWithAuthority();
         for(Cart p : cartRepository.findByUser(user.getId())){
@@ -65,6 +85,7 @@ public class InvoiceService {
         invoice.setUser(userUtils.getUserWithAuthority());
         invoice.setStatusInvoice(StatusInvoice.WAITING);
         invoice.setTotalAmount(totalAmount);
+        invoice.setPayType(invoiceRequest.getPayType());
         Invoice result = invoiceRepository.save(invoice);
 
         for(Cart p : cartRepository.findByUser(user.getId())){
@@ -85,6 +106,16 @@ public class InvoiceService {
         invoiceStatus.setCreatedDate(LocalDateTime.now());
         invoiceStatusRepository.save(invoiceStatus);
 
+        if(invoiceRequest.getPayType().equals(PayType.VNPAY)){
+            HistoryPay historyPay = new HistoryPay();
+            historyPay.setInvoice(result);
+            historyPay.setRequestId(invoiceRequest.getVnpOrderInfo());
+            historyPay.setOrderId(invoiceRequest.getVnpOrderInfo());
+            historyPay.setCreatedTime(new Time(System.currentTimeMillis()));
+            historyPay.setCreatedDate(new Date(System.currentTimeMillis()));
+            historyPay.setTotalAmount(totalAmount);
+            historyPayRepository.save(historyPay);
+        }
         cartService.deleteByUser();
     }
 

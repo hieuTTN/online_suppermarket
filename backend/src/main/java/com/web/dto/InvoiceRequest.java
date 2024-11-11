@@ -1,5 +1,6 @@
 package com.web.dto;
 
+import com.web.enums.PayType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,8 @@ import java.util.List;
 @Setter
 public class InvoiceRequest {
 
+    private PayType payType;
+
     private String address;
 
     private String fullname;
@@ -18,4 +21,7 @@ public class InvoiceRequest {
 
     private String note;
 
+    private String urlVnpay;
+
+    private String vnpOrderInfo;
 }

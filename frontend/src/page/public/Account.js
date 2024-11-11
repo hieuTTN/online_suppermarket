@@ -97,6 +97,7 @@ function AccountPage(){
                                         <th>Note</th>
                                         <th>Order status</th>
                                         <th>Total amount</th>
+                                        <th>PayType</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -111,8 +112,9 @@ function AccountPage(){
                                     <td>{item.note}</td>
                                     <td>{item.statusInvoice}</td>
                                     <td>{item.totalAmount} $</td>
+                                    <td>{item.payType}</td>
                                     <td>
-                                    {(item.statusInvoice == "WAITING" || item.statusInvoice== "CONFIRMED")?
+                                    {((item.statusInvoice == "WAITING" || item.statusInvoice== "CONFIRMED") && item.payType == 'COD')?
                                     <i onClick={()=>cancelInvoice(item.id)} class="fa fa-trash pointer"></i>:''}
                                     <i onClick={()=>getInvoiceDetail(item)} data-bs-toggle="modal" data-bs-target="#modaldeail" className='fa fa-eye iconcancel'></i>
                                     </td>

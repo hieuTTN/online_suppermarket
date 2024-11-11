@@ -127,6 +127,7 @@ const AdminInvoice = ()=>{
                                 <th>Note</th>
                                 <th>Order status</th>
                                 <th>Total amount</th>
+                                <th>Paytype</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -141,6 +142,7 @@ const AdminInvoice = ()=>{
                                     <td>{item.note}</td>
                                     <td>{item.statusInvoice}</td>
                                     <td>{item.totalAmount} $</td>
+                                    <td>{item.payType}</td>
                                     <td class="sticky-col">
                                         <i onClick={()=>setValueInp(item)} data-bs-toggle="modal" data-bs-target="#capnhatdonhang" class="fa fa-edit iconaction"></i>
                                         <i onClick={()=>getInvoiceDetail(item)} data-bs-toggle="modal" data-bs-target="#modaldeail" class="fa fa-eye iconaction"></i>

@@ -1,6 +1,7 @@
 package com.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.web.enums.PayType;
 import com.web.enums.StatusInvoice;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,9 @@ public class Invoice {
 
     @Enumerated(EnumType.STRING)
     private StatusInvoice statusInvoice;
+
+    @Enumerated(EnumType.STRING)
+    private PayType payType;
 
     @ManyToOne
     private User user;

@@ -1,5 +1,6 @@
 import {formatMoney} from '../../services/money'
 import { useState, useEffect } from 'react'
+import vnpay from '../../assest/images/vnpay.jpg'
 import { toast } from 'react-toastify'
 import {getMethod,deleteMethod, postMethodPayload} from '../../services/request'
 import Swal from 'sweetalert2'
@@ -61,7 +62,49 @@ function Cart(){
         if (con == false) {
             return;
         }
+        var paytype = document.querySelector('input[name="paytype"]:checked').value;
+        if (paytype == "vnpay") {
+            requestPayMentVnpay();
+        }
+        if (paytype == "cod") {
+            paymentCod();
+        }
+    }
+
+    async function requestPayMentVnpay() {
         var orderDto = {
+            "payType": "VNPAY",
+            "fullname": document.getElementById("fullname").value,
+            "phone": document.getElementById("phone").value,
+            "address": document.getElementById("address").value,
+            "note": document.getElementById("note").value,
+        }
+        window.localStorage.setItem('orderinfor', JSON.stringify(orderDto));
+        var returnurl = 'http://localhost:3000/payment';
+        var paymentDto = {
+            "content": "Payment vnpay",
+            "returnUrl": returnurl,
+            "notifyUrl": returnurl,
+        }
+        var res = await postMethodPayload('http://localhost:8080/api/vnpay/urlpayment', paymentDto)
+        if (res.status < 300) {
+            var result = await res.json();
+            window.open(result.url, '_blank');
+        }
+        else{
+            if(res.status == 417){
+                var result = await res.json();
+                toast.error(result.defaultMessage);
+            }
+            else{
+                toast.error("Error create payment_url");
+            }
+        }
+    }
+
+    async function paymentCod() {
+        var orderDto = {
+            "payType": "COD",
             "fullname": document.getElementById("fullname").value,
             "phone": document.getElementById("phone").value,
             "address": document.getElementById("address").value,
@@ -87,6 +130,7 @@ function Cart(){
             }
         }
     }
+    
 
     return(
         <>
@@ -135,7 +179,7 @@ function Cart(){
                     <div class="col-sm-4">
                         <div class="totalbill">
                             <span class="tds">Total Amount: </span><span class="totalamount">{totalAmount} $</span>
-                            <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btncheckout">Thanh toán</button>
+                            <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btncheckout">Payment</button>
                         </div>
                         <p class="freeship">FREE SHIPPING WITH ALL ORDERS ON THE WEBSITE</p>
                         <p>You can review your placed orders in your account section</p>
@@ -167,6 +211,24 @@ function Cart(){
                             <textarea id="note" class="form-control fomd"></textarea>
                         </div>
                         <div className='col-sm-6'>
+                        <span class="titlecheckout">Loại hình thanh toán</span>
+                            <table class="table table-bordered">
+                                <tr onclick="momo.click()">
+                                    <td><label class="radiocustom">
+                                            <input value="vnpay" id="vnpay" type="radio" name="paytype" checked/>
+                                            <span class="checkmark"></span></label></td>
+                                    <td><label for="vnpay">Vnpay payment</label></td>
+                                    <td><img src={vnpay} class="vnpayimg"/></td>
+                                </tr>
+
+                                <tr onclick="code.click()">
+                                    <td><label class="radiocustom">
+                                            <input value="cod" id="code" type="radio" name="paytype"/>
+                                            <span class="checkmark"></span></label></td>
+                                    <td><label for="code">Payment upon receipt (COD)</label></td>
+                                    <td><i class="fa fa-money paycode"></i></td>
+                                </tr>
+                            </table>
                             <table className='table table-borderless'>
                                 <tr>
                                     <td><span class="boldtext">Total amount to be paid</span></td>
