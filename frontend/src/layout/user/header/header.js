@@ -79,13 +79,16 @@ function Header (){
             <li class="nav-item">
               <a class="nav-link" href="contact">Contact</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="product">Product</a>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Category
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 {categories.map((item, index)=>{
-                  return <li><a class="dropdown-item" href={'product?category='+item.id}>{item.name}</a></li>
+                  return <li><a class="dropdown-item" href={'product-category?category='+item.id}>{item.name}</a></li>
                 })}
               </ul>
             </li>
@@ -96,7 +99,7 @@ function Header (){
                   </span>
                   <ul className={productItem.length == 0?'dropdown-menu':'dropdown-menu show'} id='listproductsearch' aria-labelledby="navbarDropdownSearch">
                     {productItem.map((item, index)=>{
-                      return <li><a class="dropdown-item" href={'detail?category='+item.id}>{item.name}</a></li>
+                      return <li><a class="dropdown-item" href={'detail?id='+item.id}>{item.name}</a></li>
                     })}
                   </ul>
               </span>

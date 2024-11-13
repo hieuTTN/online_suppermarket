@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 
 const StorePage = () => {
     const [items, setItems] = useState([]);
+    const [store, setStore] = useState(null);
     const [location, setLocation] = useState({ latitude: null, longitude: null });
     const [error, setError] = useState(null);
     useEffect(()=>{
@@ -37,7 +38,13 @@ const StorePage = () => {
             var distance = getDistanceFromLatLonInKm(result[i].latitude, result[i].longitude, latitude, longitude)
             result[i].distance = distance
         }
+        result.sort((a, b) => a.distance - b.distance);
+        console.log(result);
+        
         setItems(result)
+        if(result.length > 0){
+            setStore(result[0])
+        }
     };
 
     function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -58,25 +65,28 @@ const StorePage = () => {
     }
 
     return (
-        <div className='container contentpage'>
+        <div className='container contentpage' style={{paddingBottom:'100px'}}>
             <div className="heading_container">
                 <h2>List Store</h2>
             </div>
             <div className='row'>
-                {items.map((item, index)=>{
-                    return <div className='col-sm-4'>
-                        <div className='single-store'>
-                            <div dangerouslySetInnerHTML={{__html:item.mapLocation}}></div>
-                            <div className='contentstore'>
-                                <h4>{item.name}</h4>
-                                <strong>
-                                    Address: {item.street}, {item.city}, {item.state}, {item.country}
-                                </strong><br/>
-                                Distance to you: <span>{item.distance.toFixed(2)} Km</span>
-                            </div>
-                        </div>
+                <div className='col-sm-4'>
+                    <div className='headstore'>
+                    There are {items.length} stores near your current location
                     </div>
-                })}
+                    <div className='liststores'>
+                        {items.map((item, index)=>{
+                            return <div onClick={()=>setStore(item)} className='singlestore'>
+                                <span className='storename'>{item.name}</span>
+                                <span className='addressstor'><i className='fa fa-map-marker'></i> {item.distance.toFixed(2)} Km</span>
+                                <span className='addressstor'>{item.street}, {item.city}, {item.state}, {item.country}</span>
+                            </div>
+                        })}
+                    </div>
+                </div>
+                <div className='col-sm-8'>
+                    <div className='iframe-container' dangerouslySetInnerHTML={{__html:store?.mapLocation}}></div>
+                </div>
             </div>
         </div>
     )

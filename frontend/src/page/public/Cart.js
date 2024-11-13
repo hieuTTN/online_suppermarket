@@ -4,13 +4,21 @@ import vnpay from '../../assest/images/vnpay.jpg'
 import { toast } from 'react-toastify'
 import {getMethod,deleteMethod, postMethodPayload} from '../../services/request'
 import Swal from 'sweetalert2'
+import Select from 'react-select';
 
 
 function Cart(){
     const [items, setItems] = useState([]);
+    const [province, setProvince] = useState([]);
+    const [district, setDistrict] = useState([]);
+    const [ward, setWard] = useState([]);
     const [numCart, setNumCart] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     const [user, setUser] = useState(null);
+    const [selectProvince, setSelectProvince] = useState(null);
+    const [selectDistrict, setSelectDistrict] = useState(null);
+    const [selectWard, setSelectWard] = useState(null);
+
     useEffect(()=>{
         initCart();
         const getUser = async() =>{
@@ -19,6 +27,7 @@ function Cart(){
             setUser(us);
         };
         getUser();
+        getProvince();
     }, []);
 
     async function initCart(){
@@ -72,11 +81,12 @@ function Cart(){
     }
 
     async function requestPayMentVnpay() {
+        var address = document.getElementById("address").value + ", "+selectWard.WardName+", "+selectDistrict.DistrictName+", "+selectProvince.ProvinceName
         var orderDto = {
             "payType": "VNPAY",
             "fullname": document.getElementById("fullname").value,
             "phone": document.getElementById("phone").value,
-            "address": document.getElementById("address").value,
+            "address": address,
             "note": document.getElementById("note").value,
         }
         window.localStorage.setItem('orderinfor', JSON.stringify(orderDto));
@@ -103,13 +113,15 @@ function Cart(){
     }
 
     async function paymentCod() {
+        var address = document.getElementById("address").value + ", "+selectWard.WardName+", "+selectDistrict.DistrictName+", "+selectProvince.ProvinceName
         var orderDto = {
             "payType": "COD",
             "fullname": document.getElementById("fullname").value,
             "phone": document.getElementById("phone").value,
-            "address": document.getElementById("address").value,
+            "address": address,
             "note": document.getElementById("note").value,
         }
+        console.log(orderDto);
         var res = await postMethodPayload('/api/invoice/user/create', orderDto)
         if (res.status < 300) {
             Swal.fire({
@@ -130,6 +142,46 @@ function Cart(){
             }
         }
     }
+
+    async function getProvince() {
+        var response = await getMethod("/api/address/public/province")
+        var result = await response.json();
+        setProvince(result.data)
+        getDistrict(result.data[0].ProvinceID)
+        setSelectProvince(result.data[0])
+    }
+
+    function loadDistrict(item){
+        setSelectDistrict(null)
+        getDistrict(item.ProvinceID)
+        setSelectProvince(item)
+    }
+
+    async function getDistrict(idprovince) {
+        var response = await getMethod("/api/address/public/district?provinceId="+idprovince)
+        var result = await response.json();
+        setDistrict(result.data)
+        setSelectDistrict(result.data[0])
+        getWard(result.data[0].DistrictID)
+        
+    }
+
+    function loadWard(item){
+        setSelectWard(null)
+        getWard(item.DistrictID)
+        setSelectDistrict(item)
+    }
+
+
+    async function getWard(iddistrict) {
+        var response = await getMethod("/api/address/public/wards?districtId="+iddistrict)
+        var result = await response.json();
+        console.log(result);
+        setWard(result.data != null?result.data:[])
+        setSelectWard(result.data != null ?result.data[0]: null)
+    }
+
+    
     
 
     return(
@@ -204,14 +256,49 @@ function Cart(){
                             <label className='lbcheckout'>Recipient phone number</label>
                             <input defaultValue={user==null?'':user.phone} id="phone" class="form-control fomd"/>
 
-                            <label className='lbcheckout'>Recipient address</label>
+                            <label className='lbcheckout'>Province</label>
+                            <Select
+                                className="select-container" 
+                                onChange={loadDistrict}
+                                options={province}
+                                value={selectProvince}
+                                getOptionLabel={(option) => option.ProvinceName} 
+                                getOptionValue={(option) => option.ProvinceID}    
+                                closeMenuOnSelect={false}
+                                placeholder="Province"
+                            />
+
+                            <label className='lbcheckout'>District</label>
+                            <Select
+                                className="select-container" 
+                                onChange={loadWard}
+                                options={district}
+                                value={selectDistrict}
+                                getOptionLabel={(option) => option.DistrictName} 
+                                getOptionValue={(option) => option.DistrictID}    
+                                closeMenuOnSelect={false}
+                                placeholder="District"
+                            />
+
+                            <label className='lbcheckout'>Ward</label>
+                            <Select
+                                className="select-container" 
+                                onChange={setSelectWard}
+                                options={ward}
+                                value={selectWard}
+                                getOptionLabel={(option) => option.WardName} 
+                                getOptionValue={(option) => option.WardCode}    
+                                closeMenuOnSelect={false}
+                                placeholder="Ward"
+                            />
+                            <label className='lbcheckout'>Address detail</label>
                             <input id="address" class="form-control fomd"/>
 
                             <label className='lbcheckout'>Note</label>
                             <textarea id="note" class="form-control fomd"></textarea>
                         </div>
                         <div className='col-sm-6'>
-                        <span class="titlecheckout">Loại hình thanh toán</span>
+                        <span class="titlecheckout">Payment type</span>
                             <table class="table table-bordered">
                                 <tr onclick="momo.click()">
                                     <td><label class="radiocustom">

@@ -59,8 +59,14 @@ public class InvoiceApi {
     }
 
     @PostMapping("/admin/update-status")
-    public ResponseEntity<?> updateStatus(@RequestParam("idInvoice") Long idInvoice, @RequestParam("status") StatusInvoice statusInvoice){
-        invoiceService.updateStatus(idInvoice, statusInvoice);
+    public ResponseEntity<?> updateStatus(@RequestParam("idInvoice") Long idInvoice){
+        invoiceService.updateStatus(idInvoice);
+        return new ResponseEntity<>( HttpStatus.CREATED);
+    }
+
+    @PostMapping("/admin/update-status-noreceived")
+    public ResponseEntity<?> updateStatusNoReciver(@RequestParam("idInvoice") Long idInvoice){
+        invoiceService.NoRECEIVED(idInvoice);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
 }

@@ -58,4 +58,10 @@ public class CategoryApi {
         Category result = categoryService.findById(id);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
+    @GetMapping("/public/findById")
+    public ResponseEntity<?> publicId(@RequestParam("id") Long id){
+        Category result = categoryService.findById(id);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
 }

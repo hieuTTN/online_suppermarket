@@ -25,6 +25,7 @@ import Cart from "../page/public/Cart";
 import AccountPage from "../page/public/Account";
 import StorePage from "../page/public/Store";
 import PaymentPage from "../page/public/Payment";
+import ProductCategory from "../page/public/productCategory";
 
 const publicRoutes = [
     {path: "/", component: Index},
@@ -41,6 +42,7 @@ const publicRoutes = [
     {path: "/account", component: AccountPage},
     {path: "/store", component: StorePage},
     {path: "/payment", component: PaymentPage},
+    {path: "/product-category", component: ProductCategory},
 ];
 
 const adminRoutes = [

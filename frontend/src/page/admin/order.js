@@ -64,9 +64,20 @@ const AdminInvoice = ()=>{
         document.getElementById("trangthaiupdate").value = item.statusInvoice
     };
 
-    async function updateStatus() {
-        var stt = document.getElementById("trangthaiupdate").value
-        const res = await postMethod('/api/invoice/admin/update-status?idInvoice=' + item.id + '&status=' + stt);
+    async function updateStatus(id) {
+        const res = await postMethod('/api/invoice/admin/update-status?idInvoice=' + id);
+        if (res.status < 300) {
+            toast.success("Success!");
+            getInvoice();
+        }
+        if (res.status == 417) {
+            var result = await res.json()
+            toast.warning(result.defaultMessage);
+        }
+    }
+
+    async function noRec(id) {
+        const res = await postMethod('/api/invoice/admin/update-status-noreceived?idInvoice=' + id);
         if (res.status < 300) {
             toast.success("Success!");
             getInvoice();
@@ -144,8 +155,9 @@ const AdminInvoice = ()=>{
                                     <td>{item.totalAmount} $</td>
                                     <td>{item.payType}</td>
                                     <td class="sticky-col">
-                                        <i onClick={()=>setValueInp(item)} data-bs-toggle="modal" data-bs-target="#capnhatdonhang" class="fa fa-edit iconaction"></i>
                                         <i onClick={()=>getInvoiceDetail(item)} data-bs-toggle="modal" data-bs-target="#modaldeail" class="fa fa-eye iconaction"></i>
+                                        {item.statusInvoice != 'SENT'?'':<button className='btn btn-danger' onClick={()=>noRec(item.id)}>No received</button>}
+                                        {item.statusInvoice == 'RECEIVED' || item.statusInvoice == 'CANCELED' || item.statusInvoice == 'NO_RECEIVED'?'':<button onClick={()=>updateStatus(item.id)} className='btn btn-primary'>Update status</button>}
                                     </td>
                                 </tr>
                             }))}
@@ -253,22 +265,6 @@ const AdminInvoice = ()=>{
         </div>
     </div>
 
-    <div class="modal fade" id="capnhatdonhang" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update order status</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                <div class="modal-body">
-                    <select class="form-control" id="trangthaiupdate">
-                    {statusInvoice.map((item=>{
-                        return <option value={item}>{item}</option>
-                    }))}
-                    </select><br/><br/>
-                    <button onClick={()=>updateStatus()} class="btn btn-primary form-control action-btn">Update</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </>
     );
 }

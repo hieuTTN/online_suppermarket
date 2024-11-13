@@ -170,13 +170,41 @@ public class InvoiceService {
         return list;
     }
 
-    public void updateStatus(Long idInvoice, StatusInvoice statusInvoice) {
+    public void updateStatus(Long idInvoice) {
         Optional<Invoice> invoice = invoiceRepository.findById(idInvoice);
         if(invoice.isEmpty()){
             throw new MessageException("invoice id not found");
+        }
+        StatusInvoice statusInvoice = null;
+        if(invoice.get().getStatusInvoice().equals(StatusInvoice.CANCELED)){
+            throw new MessageException("Invoice CANCELED can't update");
+        }
+        if(invoice.get().getStatusInvoice().equals(StatusInvoice.RECEIVED)){
+            throw new MessageException("Invoice RECEIVED can't update");
+        }
+        if(invoice.get().getStatusInvoice().equals(StatusInvoice.NO_RECEIVED)){
+            throw new MessageException("Invoice NO_RECEIVED can't update");
+        }
+        if(invoice.get().getStatusInvoice().equals(StatusInvoice.WAITING)){
+            statusInvoice = StatusInvoice.CONFIRMED;
+        }
+        else if(invoice.get().getStatusInvoice().equals(StatusInvoice.CONFIRMED)){
+            statusInvoice = StatusInvoice.SENT;
+        }
+        else if(invoice.get().getStatusInvoice().equals(StatusInvoice.SENT)){
+            statusInvoice = StatusInvoice.RECEIVED;
         }
         invoice.get().setStatusInvoice(statusInvoice);
         invoiceRepository.save(invoice.get());
     }
 
+    public void NoRECEIVED(Long idInvoice) {
+        Optional<Invoice> invoice = invoiceRepository.findById(idInvoice);
+        if(invoice.isEmpty()){
+            throw new MessageException("invoice id not found");
+        }
+        StatusInvoice statusInvoice = StatusInvoice.NO_RECEIVED;
+        invoice.get().setStatusInvoice(statusInvoice);
+        invoiceRepository.save(invoice.get());
+    }
 }
