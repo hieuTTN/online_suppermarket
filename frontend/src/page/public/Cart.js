@@ -99,7 +99,7 @@ function Cart(){
         var res = await postMethodPayload('http://localhost:8080/api/vnpay/urlpayment', paymentDto)
         if (res.status < 300) {
             var result = await res.json();
-            window.open(result.url, '_blank');
+            window.location.href = result.url
         }
         else{
             if(res.status == 417){
