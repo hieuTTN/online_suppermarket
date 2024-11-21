@@ -65,13 +65,18 @@ const AdminInvoice = ()=>{
     };
 
     async function updateStatus(id) {
+        var con = window.confirm('Confirm?');
+        if(con == false){
+            return;
+        }
         const res = await postMethod('/api/invoice/admin/update-status?idInvoice=' + id);
+        var result = await res.json()
         if (res.status < 300) {
             toast.success("Success!");
+            setItem(result)
             getInvoice();
         }
         if (res.status == 417) {
-            var result = await res.json()
             toast.warning(result.defaultMessage);
         }
     }
@@ -196,7 +201,14 @@ const AdminInvoice = ()=>{
                             <br/><span>Order date: <span class="yls">{item?.createdDate}</span></span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
-                            <br/><span>Current Order Status: <span class="yls">{item?.statusInvoice}</span></span>
+                            <br/>
+                            <div className='d-flex'>
+                                <span style={{marginRight:'10px'}}>Current Order Status: 
+                                </span>
+                                 {item?.statusInvoice == 'RECEIVED' || item?.statusInvoice == 'CANCELED' || item?.statusInvoice == 'NO_RECEIVED'?'':<button onClick={()=>updateStatus(item?.id)} className='btn btn-primary'>{item?.statusInvoice}</button>}
+                                 {item?.statusInvoice == 'RECEIVED' || item?.statusInvoice == 'CANCELED' || item?.statusInvoice == 'NO_RECEIVED'?item?.statusInvoice:''}
+                            </div>
+                            {item?.statusInvoice != 'SENT'?'':<button className='btn btn-danger' onClick={()=>noRec(item?.id)}>No received</button>}
                         </div>
                     </div>
                     <div class="row shipinfor">

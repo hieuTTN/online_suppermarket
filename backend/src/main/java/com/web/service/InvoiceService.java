@@ -170,7 +170,7 @@ public class InvoiceService {
         return list;
     }
 
-    public void updateStatus(Long idInvoice) {
+    public Invoice updateStatus(Long idInvoice) {
         Optional<Invoice> invoice = invoiceRepository.findById(idInvoice);
         if(invoice.isEmpty()){
             throw new MessageException("invoice id not found");
@@ -195,7 +195,7 @@ public class InvoiceService {
             statusInvoice = StatusInvoice.RECEIVED;
         }
         invoice.get().setStatusInvoice(statusInvoice);
-        invoiceRepository.save(invoice.get());
+        return invoiceRepository.save(invoice.get());
     }
 
     public void NoRECEIVED(Long idInvoice) {
